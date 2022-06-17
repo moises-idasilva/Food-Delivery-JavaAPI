@@ -36,15 +36,9 @@ public class RestauranteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Restaurante> buscar(@PathVariable Long id) {
+    public Restaurante buscar(@PathVariable Long id) {
 
-        Optional<Restaurante> restaurante = restauranteRepository.findById(id);
-
-        if (restaurante.isPresent()) {
-            return ResponseEntity.ok(restaurante.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return cadastroRestauranteService.buscarOuFalhar(id);
 
     }
 
@@ -72,37 +66,29 @@ public class RestauranteController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Restaurante adicionar(@RequestBody Restaurante restaurante) {
 
         return cadastroRestauranteService.salvar(restaurante);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
+    public Restaurante atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
 
-       Restaurante restauranteAtual = restauranteRepository.findById(id).orElse(null);
+        Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(id);
 
-        if (restauranteAtual != null) {
-            BeanUtils.copyProperties(restaurante, restauranteAtual,
-                    "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
+        BeanUtils.copyProperties(restaurante, restauranteAtual,
+                "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
 
-            restauranteAtual = cadastroRestauranteService.salvar(restauranteAtual);
-            return ResponseEntity.ok(restauranteAtual);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return cadastroRestauranteService.salvar(restauranteAtual);
 
     }
 
     // Para atualização parcial
     @PatchMapping("/{id}")
-    public ResponseEntity<?> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
+    public Restaurante atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
 
-        Restaurante restauranteAtual = restauranteRepository.findById(id).orElse(null);
-
-        if (restauranteAtual == null) {
-            return ResponseEntity.notFound().build();
-        }
+        Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(id);
 
         //chamar o método merge() que ira mesclar as informações da entidade chamada com a entidade temporária
         merge(campos, restauranteAtual);
@@ -130,21 +116,10 @@ public class RestauranteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> remover(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long id) {
 
-        try {
             cadastroRestauranteService.excluir(id);
-            return ResponseEntity.noContent().build();
-
-        } catch (EntidadeNaoEncontradaException e) {
-            System.out.println("=> EXCEPTION: " + e);
-            return ResponseEntity.notFound().build();
-
-        } catch (EntidadeEmUsoException e) {
-            System.out.println("=> EXCEPTION: " + e);
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-
     }
 
 }

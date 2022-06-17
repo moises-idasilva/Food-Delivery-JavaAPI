@@ -30,55 +30,35 @@ public class EstadoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Estado> buscar(@PathVariable Long id) {
+    public Estado buscar(@PathVariable Long id) {
 
-        Optional<Estado> estado = estadoRepository.findById(id);
-
-        if (estado.isPresent()) {
-            return ResponseEntity.ok(estado.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return cadastroEstadoService.buscarOuFalhar(id);
 
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Estado adicionar(@RequestBody Estado estado) {
 
         return cadastroEstadoService.salvar(estado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Estado estado) {
+    public Estado atualizar(@PathVariable Long id, @RequestBody Estado estado) {
 
-        Estado estadoAtual = estadoRepository.findById(id).orElse(null);
+        Estado estadoAtual = cadastroEstadoService.buscarOuFalhar(id);
 
-        if (estadoAtual != null) {
-            BeanUtils.copyProperties(estado, estadoAtual, "id");
+        BeanUtils.copyProperties(estado, estadoAtual, "id");
 
-            estadoAtual = cadastroEstadoService.salvar(estadoAtual);
-            return ResponseEntity.ok(estadoAtual);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return cadastroEstadoService.salvar(estadoAtual);
 
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> remover(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long id) {
 
-        try {
-            cadastroEstadoService.excluir(id);
-            return ResponseEntity.noContent().build();
-
-        } catch (EntidadeNaoEncontradaException e) {
-            System.out.println("=> EXCEPTION: " + e);
-            return ResponseEntity.notFound().build();
-
-        } catch (EntidadeEmUsoException e) {
-            System.out.println("=> EXCEPTION: " + e);
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+        cadastroEstadoService.excluir(id);
 
     }
 
