@@ -1,14 +1,13 @@
 package com.moises.foodapp.api.controller;
 
-import com.moises.foodapp.domain.exception.EntidadeEmUsoException;
-import com.moises.foodapp.domain.exception.EntidadeNaoEncontradaException;
+import com.moises.foodapp.domain.exception.EstadoNaoEncontradoException;
+import com.moises.foodapp.domain.exception.NegocioException;
 import com.moises.foodapp.domain.model.Cidade;
 import com.moises.foodapp.domain.repository.CidadeRepository;
 import com.moises.foodapp.domain.service.CadastroCidadeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,25 +31,31 @@ public class CidadeController {
     public Cidade buscar(@PathVariable Long id) {
 
         return cadastroCidadeService.buscarOuFalhar(id);
-
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Cidade adicionar(@RequestBody Cidade cidade) {
 
-        return cadastroCidadeService.salvar(cidade);
+        try {
+            return cadastroCidadeService.salvar(cidade);
+        } catch (EstadoNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
     public Cidade atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
 
-        Cidade cidadeAtual = cadastroCidadeService.buscarOuFalhar(id);
+        try {
+            Cidade cidadeAtual = cadastroCidadeService.buscarOuFalhar(id);
 
-        BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+            BeanUtils.copyProperties(cidade, cidadeAtual, "id");
 
-        return cadastroCidadeService.salvar(cidadeAtual);
-
+            return cadastroCidadeService.salvar(cidadeAtual);
+        } catch (EstadoNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

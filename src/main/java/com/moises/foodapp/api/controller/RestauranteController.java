@@ -1,15 +1,14 @@
 package com.moises.foodapp.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moises.foodapp.domain.exception.EntidadeEmUsoException;
-import com.moises.foodapp.domain.exception.EntidadeNaoEncontradaException;
+import com.moises.foodapp.domain.exception.CozihaNaoEncontradaException;
+import com.moises.foodapp.domain.exception.NegocioException;
 import com.moises.foodapp.domain.model.Restaurante;
 import com.moises.foodapp.domain.repository.RestauranteRepository;
 import com.moises.foodapp.domain.service.CadastroRestauranteService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +16,6 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -69,18 +67,27 @@ public class RestauranteController {
     @ResponseStatus(HttpStatus.CREATED)
     public Restaurante adicionar(@RequestBody Restaurante restaurante) {
 
-        return cadastroRestauranteService.salvar(restaurante);
+        try {
+            return cadastroRestauranteService.salvar(restaurante);
+        } catch (CozihaNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
     public Restaurante atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
 
-        Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(id);
+        try {
+            Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(id);
 
-        BeanUtils.copyProperties(restaurante, restauranteAtual,
-                "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
+            BeanUtils.copyProperties(restaurante, restauranteAtual,
+                    "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
 
-        return cadastroRestauranteService.salvar(restauranteAtual);
+            return cadastroRestauranteService.salvar(restauranteAtual);
+        } catch (CozihaNaoEncontradaException e) {
+            throw new NegocioException(e.getMessage());
+        }
+
 
     }
 
@@ -119,7 +126,7 @@ public class RestauranteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(@PathVariable Long id) {
 
-            cadastroRestauranteService.excluir(id);
+        cadastroRestauranteService.excluir(id);
     }
 
 }
