@@ -3,11 +3,10 @@ package com.moises.foodapp.domain.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,16 +32,16 @@ public class Pedido {
 
     @CreationTimestamp
     @Column(name = "data_criacao", columnDefinition = "datetime", nullable = false)
-    private LocalDateTime dataCriacao;
+    private OffsetDateTime dataCriacao;
 
     @Column(name = "data_confirmacao", columnDefinition = "datetime")
-    private LocalDateTime dataConfirmacao;
+    private OffsetDateTime dataConfirmacao;
 
     @Column(name = "data_cancelamento", columnDefinition = "datetime")
-    private  LocalDateTime dataCancelamento;
+    private  OffsetDateTime dataCancelamento;
 
     @Column(name = "data_entrega", columnDefinition = "datetime")
-    private LocalDateTime dataEntrega;
+    private OffsetDateTime dataEntrega;
 
     @Embedded
     @Column(name = "endereco_entrega")

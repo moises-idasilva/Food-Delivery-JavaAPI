@@ -1,8 +1,11 @@
 package com.moises.foodapp.domain.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.moises.foodapp.core.validation.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,6 +17,7 @@ import java.util.List;
 @Entity
 public class Cozinha {
 
+    @NotNull(groups = Groups.CozinhaId.class)
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +26,6 @@ public class Cozinha {
     @Column(nullable = false)
     private String nome;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "cozinha")
     private List<Restaurante> restaurantes = new ArrayList<>();
 

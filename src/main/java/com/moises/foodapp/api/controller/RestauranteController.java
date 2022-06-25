@@ -1,6 +1,10 @@
 package com.moises.foodapp.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moises.foodapp.api.assembler.RestauranteModelAssembler;
+import com.moises.foodapp.api.assembler.RestauranteInputDisassembler;
+import com.moises.foodapp.api.dto.RestauranteModel;
+import com.moises.foodapp.api.dto.input.RestauranteInput;
 import com.moises.foodapp.domain.exception.CozihaNaoEncontradaException;
 import com.moises.foodapp.domain.exception.NegocioException;
 import com.moises.foodapp.domain.model.Restaurante;
@@ -12,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,16 +32,26 @@ public class RestauranteController {
     @Autowired
     private CadastroRestauranteService cadastroRestauranteService;
 
-    @GetMapping
-    public List<Restaurante> listar() {
+    @Autowired
+    private RestauranteModelAssembler restauranteModelAssembler;
 
-        return restauranteRepository.findAll();
+    @Autowired
+    private RestauranteInputDisassembler restauranteInputDisassembler;
+
+    @GetMapping
+    public List<RestauranteModel> listar() {
+
+        return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
     }
 
     @GetMapping("/{id}")
-    public Restaurante buscar(@PathVariable Long id) {
+    public RestauranteModel buscar(@PathVariable Long id) {
 
-        return cadastroRestauranteService.buscarOuFalhar(id);
+        Restaurante restaurante = cadastroRestauranteService.buscarOuFalhar(id);
+
+        RestauranteModel restauranteModel = restauranteModelAssembler.toModel(restaurante);
+
+        return restauranteModel;
 
     }
 
@@ -65,43 +80,48 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante adicionar(@RequestBody Restaurante restaurante) {
+    public RestauranteModel adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
 
         try {
-            return cadastroRestauranteService.salvar(restaurante);
+            Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
+
+            return restauranteModelAssembler.toModel(cadastroRestauranteService.salvar(restaurante));
         } catch (CozihaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
-    public Restaurante atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
+    public RestauranteModel atualizar(@PathVariable Long id, @RequestBody @Valid RestauranteInput restauranteInput) {
 
         try {
+//            Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
+
             Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(id);
 
-            BeanUtils.copyProperties(restaurante, restauranteAtual,
-                    "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
+            restauranteInputDisassembler.copyToDomainObject(restauranteInput, restauranteAtual);
 
-            return cadastroRestauranteService.salvar(restauranteAtual);
+//            BeanUtils.copyProperties(restaurante, restauranteAtual,
+//                    "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
+
+            return restauranteModelAssembler.toModel(cadastroRestauranteService.salvar(restauranteAtual));
         } catch (CozihaNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
 
-
     }
 
-    // Para atualização parcial
-    @PatchMapping("/{id}")
-    public Restaurante atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
-
-        Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(id);
-
-        //chamar o método merge() que ira mesclar as informações da entidade chamada com a entidade temporária
-        merge(campos, restauranteAtual);
-
-        return atualizar(id, restauranteAtual);
-    }
+    // Para atualização parcial apenas para referencia
+//    @PatchMapping("/{id}")
+//    public RestauranteModel atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
+//
+//        Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(id);
+//
+//        //chamar o método merge() que ira mesclar as informações da entidade chamada com a entidade temporária
+//        merge(campos, restauranteAtual);
+//
+//        return toModel(atualizar(id, restauranteAtual));
+//    }
 
     private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino) {
 
@@ -128,5 +148,6 @@ public class RestauranteController {
 
         cadastroRestauranteService.excluir(id);
     }
+
 
 }

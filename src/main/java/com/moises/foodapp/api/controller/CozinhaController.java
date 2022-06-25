@@ -1,5 +1,9 @@
 package com.moises.foodapp.api.controller;
 
+import com.moises.foodapp.api.assembler.CozinhaInputDisassembler;
+import com.moises.foodapp.api.assembler.CozinhaModelAssembler;
+import com.moises.foodapp.api.dto.CozinhaModel;
+import com.moises.foodapp.api.dto.input.CozinhaInput;
 import com.moises.foodapp.api.model.CozinhasXmlWrapper;
 import com.moises.foodapp.domain.model.Cozinha;
 import com.moises.foodapp.domain.repository.CozinhaRepository;
@@ -10,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,10 +29,18 @@ public class CozinhaController {
     @Autowired
     private CadastroCozinhaService cadastroCozinhaService;
 
+    @Autowired
+    private CozinhaModelAssembler cozinhaModelAssembler;
 
-    @GetMapping(produces = "application/json")
-    public List<Cozinha> listar() {
-        return cozinhaRepository.findAll();
+    @Autowired
+    private CozinhaInputDisassembler cozinhaInputDisassembler;
+
+
+    @GetMapping
+    public List<CozinhaModel> listar() {
+        List<Cozinha> todasCozinhas = cozinhaRepository.findAll();
+
+        return cozinhaModelAssembler.toCollectionModel(todasCozinhas);
     }
 
     // Apenas para referência de como retornar um XML
@@ -37,9 +50,10 @@ public class CozinhaController {
     }
 
     @GetMapping("/{cozinhaId}")
-    public Cozinha buscar(@PathVariable Long cozinhaId) {
+    public CozinhaModel buscar(@PathVariable Long cozinhaId) {
+        Cozinha cozinha = cadastroCozinhaService.buscarOuFalhar(cozinhaId);
 
-        return cadastroCozinhaService.buscarOuFalhar(cozinhaId);
+        return cozinhaModelAssembler.toModel(cozinha);
     }
 
     @GetMapping("/busca-por-nome")
@@ -55,13 +69,15 @@ public class CozinhaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cozinha adicionar(@RequestBody Cozinha cozinha) {
+    public CozinhaModel adicionar(@RequestBody @Valid CozinhaInput cozinhaInput) {
+        Cozinha cozinha = cozinhaInputDisassembler.toDomainObject(cozinhaInput);
+        cozinha = cadastroCozinhaService.salvar(cozinha);
 
-        return cadastroCozinhaService.salvar(cozinha);
+        return cozinhaModelAssembler.toModel(cozinha);
     }
 
     @PutMapping("/{id}")
-    public Cozinha atualizar(@PathVariable Long id, @RequestBody Cozinha cozinha) {
+    public Cozinha atualizar(@PathVariable Long id, @RequestBody @Valid Cozinha cozinha) {
 
         Cozinha cozinhaAtual = cadastroCozinhaService.buscarOuFalhar(id);
 
