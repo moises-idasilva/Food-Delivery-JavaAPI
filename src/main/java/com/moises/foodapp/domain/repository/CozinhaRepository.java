@@ -10,5 +10,4 @@ public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
 
     List<Cozinha> findByNomeIsContainingIgnoreCase(String nome);
 
-
 }

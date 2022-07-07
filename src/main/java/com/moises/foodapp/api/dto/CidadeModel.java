@@ -1,6 +1,5 @@
-package com.moises.foodapp.api.dto.input;
+package com.moises.foodapp.api.dto;
 
-import com.moises.foodapp.api.dto.EstadoModel;
 import lombok.Getter;
 import lombok.Setter;
 

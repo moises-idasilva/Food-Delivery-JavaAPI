@@ -2,6 +2,7 @@ package com.moises.foodapp.domain.service;
 
 import com.moises.foodapp.domain.exception.EntidadeEmUsoException;
 import com.moises.foodapp.domain.exception.RestauranteNaoEncontradoException;
+import com.moises.foodapp.domain.model.Cidade;
 import com.moises.foodapp.domain.model.Cozinha;
 import com.moises.foodapp.domain.model.Restaurante;
 import com.moises.foodapp.domain.repository.RestauranteRepository;
@@ -22,18 +23,41 @@ public class CadastroRestauranteService {
     @Autowired
     private CadastroCozinhaService cadastroCozinhaService;
 
+    @Autowired
+    private CadastroCidadeService cadastroCidadeService;
+
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
 
         Long cozinhaId = restaurante.getCozinha().getId();
         Cozinha cozinha = cadastroCozinhaService.buscarOuFalhar(cozinhaId);
 
+        Long cidadeId = restaurante.getEndereco().getCidade().getId();
+        Cidade cidade = cadastroCidadeService.buscarOuFalhar(cidadeId);
+
         restaurante.setCozinha(cozinha);
+        restaurante.getEndereco().setCidade(cidade);
 
         return restauranteRepository.save(restaurante);
     }
 
-    public Restaurante buscarOuFalhar(Long id){
+    @Transactional
+    public void ativar(Long restauranteId) {
+        Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
+
+        restauranteAtual.ativar();
+
+    }
+
+    @Transactional
+    public void inativar(Long restauranteId) {
+        Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
+
+        restauranteAtual.inativar();
+
+    }
+
+    public Restaurante buscarOuFalhar(Long id) {
         return restauranteRepository.findById(id)
                 .orElseThrow(() -> new RestauranteNaoEncontradoException(id));
     }

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -14,6 +13,8 @@ public class RestauranteModel {
     private String nome;
     private BigDecimal taxaFrete;
     private CozinhaModel cozinha;
+    private Boolean ativo;
+    private EnderecoModel endereco;
 
     //private OffsetDateTime dataCadastro;
 

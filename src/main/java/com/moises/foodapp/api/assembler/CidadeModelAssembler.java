@@ -1,6 +1,6 @@
 package com.moises.foodapp.api.assembler;
 
-import com.moises.foodapp.api.dto.input.CidadeModel;
+import com.moises.foodapp.api.dto.CidadeModel;
 import com.moises.foodapp.domain.model.Cidade;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

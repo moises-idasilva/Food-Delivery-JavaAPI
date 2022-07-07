@@ -5,6 +5,7 @@ import com.moises.foodapp.api.assembler.RestauranteModelAssembler;
 import com.moises.foodapp.api.assembler.RestauranteInputDisassembler;
 import com.moises.foodapp.api.dto.RestauranteModel;
 import com.moises.foodapp.api.dto.input.RestauranteInput;
+import com.moises.foodapp.domain.exception.CidadeNaoEncontradaException;
 import com.moises.foodapp.domain.exception.CozihaNaoEncontradaException;
 import com.moises.foodapp.domain.exception.NegocioException;
 import com.moises.foodapp.domain.model.Restaurante;
@@ -86,7 +87,7 @@ public class RestauranteController {
             Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
 
             return restauranteModelAssembler.toModel(cadastroRestauranteService.salvar(restaurante));
-        } catch (CozihaNaoEncontradaException e) {
+        } catch (CozihaNaoEncontradaException | CidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
     }
@@ -105,9 +106,26 @@ public class RestauranteController {
 //                    "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
 
             return restauranteModelAssembler.toModel(cadastroRestauranteService.salvar(restauranteAtual));
-        } catch (CozihaNaoEncontradaException e) {
+        } catch (CozihaNaoEncontradaException | CidadeNaoEncontradaException e) {
             throw new NegocioException(e.getMessage());
         }
+
+    }
+
+    @PutMapping("/{restauranteId}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativar(@PathVariable Long restauranteId){
+
+        cadastroRestauranteService.ativar(restauranteId);
+
+    }
+
+
+    @DeleteMapping("/{restauranteId}/ativo")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inativar(@PathVariable Long restauranteId){
+
+        cadastroRestauranteService.inativar(restauranteId);
 
     }
 
