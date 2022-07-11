@@ -26,7 +26,7 @@ public class Usuario {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "senha", nullable = false)
     private String senha;
 
     @CreationTimestamp
@@ -38,6 +38,16 @@ public class Usuario {
     joinColumns = @JoinColumn(name = "usuario_id"),
     inverseJoinColumns = @JoinColumn(name = "grupo_id"))
     private List<Grupo> grupos = new ArrayList<>();
+
+
+    // Métodos que nos ajudarão na validação da senha
+    public boolean senhaCoincideCom(String senha) {
+        return getSenha().equals(senha);
+    }
+
+    public boolean senhaNaoCoincideCom(String senha) {
+        return !senhaCoincideCom(senha);
+    }
 
 
 }

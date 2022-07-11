@@ -4,6 +4,7 @@ import com.moises.foodapp.domain.exception.EntidadeEmUsoException;
 import com.moises.foodapp.domain.exception.RestauranteNaoEncontradoException;
 import com.moises.foodapp.domain.model.Cidade;
 import com.moises.foodapp.domain.model.Cozinha;
+import com.moises.foodapp.domain.model.FormaPagamento;
 import com.moises.foodapp.domain.model.Restaurante;
 import com.moises.foodapp.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class CadastroRestauranteService {
 
     @Autowired
     private CadastroCidadeService cadastroCidadeService;
+
+    @Autowired
+    private CadastroFormaPagamentoService cadastroFormaPagamentoService;
 
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
@@ -55,6 +59,24 @@ public class CadastroRestauranteService {
 
         restauranteAtual.inativar();
 
+    }
+
+    @Transactional
+    public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId);
+
+        restaurante.removerFormaPagamento(formaPagamento);
+    }
+
+    @Transactional
+    public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscarOuFalhar(formaPagamentoId);
+
+        restaurante.adicionarFormaPagamento(formaPagamento);
     }
 
     public Restaurante buscarOuFalhar(Long id) {

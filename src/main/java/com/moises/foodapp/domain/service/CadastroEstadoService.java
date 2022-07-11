@@ -1,7 +1,6 @@
 package com.moises.foodapp.domain.service;
 
 import com.moises.foodapp.domain.exception.EntidadeEmUsoException;
-import com.moises.foodapp.domain.exception.EntidadeNaoEncontradaException;
 import com.moises.foodapp.domain.exception.EstadoNaoEncontradoException;
 import com.moises.foodapp.domain.model.Estado;
 import com.moises.foodapp.domain.repository.EstadoRepository;
