@@ -39,7 +39,6 @@ public class Usuario {
     inverseJoinColumns = @JoinColumn(name = "grupo_id"))
     private Set<Grupo> grupos = new HashSet<>();
 
-
     // Métodos que nos ajudarão na validação da senha
     public boolean senhaCoincideCom(String senha) {
         return getSenha().equals(senha);
@@ -58,6 +57,8 @@ public class Usuario {
     public boolean adicionarGrupo(Grupo grupo) {
         return getGrupos().add(grupo);
     }
+
+
 
 
 }

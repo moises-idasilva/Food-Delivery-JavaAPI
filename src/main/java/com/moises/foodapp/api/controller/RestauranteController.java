@@ -8,6 +8,7 @@ import com.moises.foodapp.api.dto.input.RestauranteInput;
 import com.moises.foodapp.domain.exception.CidadeNaoEncontradaException;
 import com.moises.foodapp.domain.exception.CozihaNaoEncontradaException;
 import com.moises.foodapp.domain.exception.NegocioException;
+import com.moises.foodapp.domain.exception.RestauranteNaoEncontradoException;
 import com.moises.foodapp.domain.model.Restaurante;
 import com.moises.foodapp.domain.repository.RestauranteRepository;
 import com.moises.foodapp.domain.service.CadastroRestauranteService;
@@ -117,6 +118,30 @@ public class RestauranteController {
     public void ativar(@PathVariable Long restauranteId){
 
         cadastroRestauranteService.ativar(restauranteId);
+
+    }
+
+    @PutMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativarMultiplos(@RequestBody List<Long> restauranteIds) {
+
+        try {
+            cadastroRestauranteService.ativar(restauranteIds);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
+
+    }
+
+    @DeleteMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inativarMultiplos(@RequestBody List<Long> restauranteIds) {
+
+        try {
+            cadastroRestauranteService.inativar(restauranteIds);
+        } catch (RestauranteNaoEncontradoException e) {
+            throw new NegocioException(e.getMessage(), e);
+        }
 
     }
 

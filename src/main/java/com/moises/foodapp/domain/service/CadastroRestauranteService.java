@@ -2,16 +2,15 @@ package com.moises.foodapp.domain.service;
 
 import com.moises.foodapp.domain.exception.EntidadeEmUsoException;
 import com.moises.foodapp.domain.exception.RestauranteNaoEncontradoException;
-import com.moises.foodapp.domain.model.Cidade;
-import com.moises.foodapp.domain.model.Cozinha;
-import com.moises.foodapp.domain.model.FormaPagamento;
-import com.moises.foodapp.domain.model.Restaurante;
+import com.moises.foodapp.domain.model.*;
 import com.moises.foodapp.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CadastroRestauranteService {
@@ -29,6 +28,9 @@ public class CadastroRestauranteService {
 
     @Autowired
     private CadastroFormaPagamentoService cadastroFormaPagamentoService;
+
+    @Autowired
+    private CadastroUsuarioService cadastroUsuarioService;
 
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
@@ -100,6 +102,16 @@ public class CadastroRestauranteService {
     }
 
     @Transactional
+    public void ativar(List<Long> restauranteIds) {
+        restauranteIds.forEach(this::ativar);
+    }
+
+    @Transactional
+    public void inativar(List<Long> restauranteIds) {
+        restauranteIds.forEach(this::inativar);
+    }
+
+    @Transactional
     public void abrir(Long restauranteId) {
         Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
 
@@ -111,6 +123,22 @@ public class CadastroRestauranteService {
         Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
 
         restauranteAtual.fechar();
+    }
+
+    @Transactional
+    public void desassociarResponsavel(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
+
+        restaurante.removerResponsavel(usuario);
+    }
+
+    @Transactional
+    public void associarResponsavel(Long restauranteId, Long usuarioId) {
+        Restaurante restaurante = buscarOuFalhar(restauranteId);
+        Usuario usuario = cadastroUsuarioService.buscarOuFalhar(usuarioId);
+
+        restaurante.adicionarResponsavel(usuario);
     }
 
 }
