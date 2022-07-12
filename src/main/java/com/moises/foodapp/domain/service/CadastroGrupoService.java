@@ -3,6 +3,7 @@ package com.moises.foodapp.domain.service;
 import com.moises.foodapp.domain.exception.EntidadeEmUsoException;
 import com.moises.foodapp.domain.exception.GrupoNaoEncontradoException;
 import com.moises.foodapp.domain.model.Grupo;
+import com.moises.foodapp.domain.model.Permissao;
 import com.moises.foodapp.domain.repository.GrupoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,6 +18,9 @@ public class CadastroGrupoService {
 
     @Autowired
     private GrupoRepository grupoRepository;
+
+    @Autowired
+    private CadastroPermissaoService cadastroPermissaoService;
 
     @Transactional
     public Grupo salvar(Grupo grupo) {
@@ -45,5 +49,22 @@ public class CadastroGrupoService {
         }
 
     }
+
+    @Transactional
+    public void desassociarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = cadastroPermissaoService.buscarOuFalhar(permissaoId);
+
+        grupo.removerPermissao(permissao);
+    }
+
+    @Transactional
+    public void associarPermissao(Long grupoId, Long permissaoId) {
+        Grupo grupo = buscarOuFalhar(grupoId);
+        Permissao permissao = cadastroPermissaoService.buscarOuFalhar(permissaoId);
+
+        grupo.adicionarPermissao(permissao);
+    }
+
 
 }

@@ -6,8 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -37,7 +37,7 @@ public class Usuario {
     @JoinTable(name = "usuario_grupo",
     joinColumns = @JoinColumn(name = "usuario_id"),
     inverseJoinColumns = @JoinColumn(name = "grupo_id"))
-    private List<Grupo> grupos = new ArrayList<>();
+    private Set<Grupo> grupos = new HashSet<>();
 
 
     // Métodos que nos ajudarão na validação da senha
@@ -47,6 +47,16 @@ public class Usuario {
 
     public boolean senhaNaoCoincideCom(String senha) {
         return !senhaCoincideCom(senha);
+    }
+
+
+    //métodos para adicionar e remover grupos na entidade Usuario
+    public boolean removerGrupo(Grupo grupo) {
+        return getGrupos().remove(grupo);
+    }
+
+    public boolean adicionarGrupo(Grupo grupo) {
+        return getGrupos().add(grupo);
     }
 
 
