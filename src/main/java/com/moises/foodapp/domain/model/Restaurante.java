@@ -108,4 +108,13 @@ public class Restaurante {
         return getResponsaveis().add(usuario);
     }
 
+    //  métodos que irão retornar se o Restaurante em questão aceita ou não determinada forma de pagamento
+    public boolean aceitaFormaPagamento(FormaPagamento formaPagamento) {
+        return getFormasPagamento().contains(formaPagamento);
+    }
+
+    public boolean naoAceitaFormaPagamento(FormaPagamento formaPagamento) {
+        return !aceitaFormaPagamento(formaPagamento);
+    }
+
 }

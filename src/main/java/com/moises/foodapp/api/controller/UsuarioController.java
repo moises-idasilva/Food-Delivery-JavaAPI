@@ -70,4 +70,5 @@ public class UsuarioController {
     public void alterarSenha(@PathVariable Long usuarioId, @RequestBody @Valid SenhaInput senha) {
         cadastroUsuario.alterarSenha(usuarioId, senha.getSenhaAtual(), senha.getNovaSenha());
     }
+
 }

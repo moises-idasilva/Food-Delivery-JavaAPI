@@ -1,10 +1,12 @@
 package com.moises.foodapp.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moises.foodapp.api.assembler.RestauranteModelAssembler;
 import com.moises.foodapp.api.assembler.RestauranteInputDisassembler;
 import com.moises.foodapp.api.dto.RestauranteModel;
 import com.moises.foodapp.api.dto.input.RestauranteInput;
+import com.moises.foodapp.api.dto.view.RestauranteView;
 import com.moises.foodapp.domain.exception.CidadeNaoEncontradaException;
 import com.moises.foodapp.domain.exception.CozihaNaoEncontradaException;
 import com.moises.foodapp.domain.exception.NegocioException;
@@ -44,6 +46,20 @@ public class RestauranteController {
     public List<RestauranteModel> listar() {
 
         return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
+    }
+
+    @JsonView(RestauranteView.Resumo.class)
+    @GetMapping(params = "projecao=resumido")
+    public List<RestauranteModel> listarResumido() {
+
+        return listar();
+    }
+
+    @JsonView(RestauranteView.ApenasNome.class)
+    @GetMapping(params = "projecao=apenas-nome")
+    public List<RestauranteModel> listarApenasNomes() {
+
+        return listar();
     }
 
     @GetMapping("/{id}")

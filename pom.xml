@@ -13,9 +13,12 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>intro-api</name>
     <description>intro-api</description>
+
     <properties>
         <java.version>12</java.version>
+        <squiggly.version>1.3.18</squiggly.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -80,6 +83,12 @@
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>2.4.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.bohnman</groupId>
+            <artifactId>squiggly-filter-jackson</artifactId>
+            <version>${squiggly.version}</version>
         </dependency>
 
     </dependencies>

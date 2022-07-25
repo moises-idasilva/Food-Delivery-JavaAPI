@@ -1,7 +1,9 @@
 package com.moises.foodapp.core.modelmapper;
 
 import com.moises.foodapp.api.dto.EnderecoModel;
+import com.moises.foodapp.api.dto.input.ItemPedidoInput;
 import com.moises.foodapp.domain.model.Endereco;
+import com.moises.foodapp.domain.model.ItemPedido;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +23,13 @@ public class ModelMapperConfig {
                 enderecoSrc -> enderecoSrc.getCidade().getEstado().getNome(),
                 (enderecoModelDest, value) -> enderecoModelDest.getCidade().setEstado(value));
 
+        modelMapper.createTypeMap(ItemPedidoInput.class, ItemPedido.class)
+                .addMappings(mapper -> mapper.skip(ItemPedido::setId));
+
         return modelMapper;
 
     }
+
+
 
 }
