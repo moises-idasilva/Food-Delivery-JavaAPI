@@ -1,7 +1,5 @@
 package com.moises.foodapp.api.controller;
 
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.moises.foodapp.api.assembler.PedidoInputDisassembler;
 import com.moises.foodapp.api.assembler.PedidoModelAssembler;
 import com.moises.foodapp.api.assembler.PedidoResumoModelAssembler;
@@ -13,11 +11,11 @@ import com.moises.foodapp.domain.exception.NegocioException;
 import com.moises.foodapp.domain.model.Pedido;
 import com.moises.foodapp.domain.model.Usuario;
 import com.moises.foodapp.domain.repository.PedidoRepository;
+import com.moises.foodapp.domain.repository.filter.PedidoFilter;
 import com.moises.foodapp.domain.service.EmissaoPedidoService;
-import org.apache.commons.lang3.StringUtils;
+import com.moises.foodapp.infrastructure.repository.spec.PedidoSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -65,8 +63,10 @@ public class PedidoController {
 //    }
 
     @GetMapping
-    public List<PedidoResumoModel> listar() {
-        List<Pedido> todosPedidos = pedidoRepository.findAll();
+    public List<PedidoResumoModel> pesquisar(PedidoFilter filtro) {
+
+        // adicionar JpaSpecificationExecutor<Pedido> como extensao do Pedido Repository
+        List<Pedido> todosPedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro));
 
         return pedidoResumoModelAssembler.toCollectionModel(todosPedidos);
     }
