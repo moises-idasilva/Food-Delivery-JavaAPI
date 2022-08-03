@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import javax.persistence.criteria.Predicate;
 
 import com.moises.foodapp.domain.model.Pedido;
-import com.moises.foodapp.domain.repository.filter.PedidoFilter;
+import com.moises.foodapp.domain.filter.PedidoFilter;
 import org.springframework.data.jpa.domain.Specification;
 
 
