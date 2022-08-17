@@ -3,6 +3,7 @@ package com.moises.foodapp.domain.service;
 import com.moises.foodapp.domain.exception.FotoProdutoNaoEncontradaException;
 import com.moises.foodapp.domain.model.FotoProduto;
 import com.moises.foodapp.domain.repository.ProdutoRepository;
+import com.moises.foodapp.domain.service.FotoStorageService.NovaFoto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,17 +18,17 @@ public class CatalogoFotoProdutoService {
     private ProdutoRepository produtoRepository;
 
     @Autowired
-    private FotoStorageService fotoStorageService;
+    private FotoStorageService fotoStorage;
 
     @Transactional
-    public FotoProduto salvar(FotoProduto foto, InputStream dadosArquivos) {
-
+    public FotoProduto salvar(FotoProduto foto, InputStream dadosArquivo) {
         Long restauranteId = foto.getRestauranteId();
         Long produtoId = foto.getProduto().getId();
-        String nomeNovoArquivo = fotoStorageService.gerarNomeArquivo(foto.getNomeArquivo());
+        String nomeNovoArquivo = fotoStorage.gerarNomeArquivo(foto.getNomeArquivo());
         String nomeArquivoExistente = null;
 
-        Optional<FotoProduto> fotoExistente = produtoRepository.findFotoById(restauranteId, produtoId);
+        Optional<FotoProduto> fotoExistente = produtoRepository
+                .findFotoById(restauranteId, produtoId);
 
         if (fotoExistente.isPresent()) {
             nomeArquivoExistente = fotoExistente.get().getNomeArquivo();
@@ -35,18 +36,18 @@ public class CatalogoFotoProdutoService {
         }
 
         foto.setNomeArquivo(nomeNovoArquivo);
-        foto = produtoRepository.save(foto);
+        foto =  produtoRepository.save(foto);
         produtoRepository.flush();
 
-        FotoStorageService.NovaFoto novaFoto = FotoStorageService.NovaFoto.builder()
+        NovaFoto novaFoto = NovaFoto.builder()
                 .nomeArquivo(foto.getNomeArquivo())
-                .inputStream(dadosArquivos)
+                .contentType(foto.getContentType())
+                .inputStream(dadosArquivo)
                 .build();
 
-        fotoStorageService.substituir(nomeArquivoExistente, novaFoto);
+        fotoStorage.substituir(nomeArquivoExistente, novaFoto);
 
         return foto;
-
     }
 
     public FotoProduto buscarOuFalhar(Long restauranteId, Long produtoId) {
@@ -61,7 +62,7 @@ public class CatalogoFotoProdutoService {
         produtoRepository.delete(foto);
         produtoRepository.flush();
 
-        fotoStorageService.remover(foto.getNomeArquivo());
+        fotoStorage.remover(foto.getNomeArquivo());
     }
 
 

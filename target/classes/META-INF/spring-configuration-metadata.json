@@ -1,0 +1,23 @@
+{
+  "groups": [
+    {
+      "name": "foodapp.storage",
+      "type": "com.moises.foodapp.core.storage.StorageProperties",
+      "sourceType": "com.moises.foodapp.core.storage.StorageProperties"
+    },
+    {
+      "name": "foodapp.storage.local",
+      "type": "com.moises.foodapp.core.storage.StorageProperties$Local",
+      "sourceType": "com.moises.foodapp.core.storage.StorageProperties",
+      "sourceMethod": "getLocal()"
+    },
+    {
+      "name": "foodapp.storage.s3",
+      "type": "com.moises.foodapp.core.storage.StorageProperties$S3",
+      "sourceType": "com.moises.foodapp.core.storage.StorageProperties",
+      "sourceMethod": "getS3()"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}
