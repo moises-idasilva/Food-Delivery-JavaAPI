@@ -1,6 +1,17 @@
 {
   "groups": [
     {
+      "name": "foodapp.email",
+      "type": "com.moises.foodapp.core.email.EmailProperties",
+      "sourceType": "com.moises.foodapp.core.email.EmailProperties"
+    },
+    {
+      "name": "foodapp.email.sandbox",
+      "type": "com.moises.foodapp.core.email.EmailProperties$Sandbox",
+      "sourceType": "com.moises.foodapp.core.email.EmailProperties",
+      "sourceMethod": "getSandbox()"
+    },
+    {
       "name": "foodapp.storage",
       "type": "com.moises.foodapp.core.storage.StorageProperties",
       "sourceType": "com.moises.foodapp.core.storage.StorageProperties"
@@ -18,6 +29,22 @@
       "sourceMethod": "getS3()"
     }
   ],
-  "properties": [],
+  "properties": [
+    {
+      "name": "foodapp.email.impl",
+      "type": "com.moises.foodapp.core.email.EmailProperties$Implementacao",
+      "sourceType": "com.moises.foodapp.core.email.EmailProperties"
+    },
+    {
+      "name": "foodapp.email.remetente",
+      "type": "java.lang.String",
+      "sourceType": "com.moises.foodapp.core.email.EmailProperties"
+    },
+    {
+      "name": "foodapp.storage.tipo",
+      "type": "com.moises.foodapp.core.storage.StorageProperties$TipoStorage",
+      "sourceType": "com.moises.foodapp.core.storage.StorageProperties"
+    }
+  ],
   "hints": []
 }
