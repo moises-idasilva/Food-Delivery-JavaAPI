@@ -1,6 +1,5 @@
 package com.moises.foodapp.api.assembler;
 
-import com.moises.foodapp.api.dto.CozinhaModel;
 import com.moises.foodapp.api.dto.RestauranteModel;
 import com.moises.foodapp.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;

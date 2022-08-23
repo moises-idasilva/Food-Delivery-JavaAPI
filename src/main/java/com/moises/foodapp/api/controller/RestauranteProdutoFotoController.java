@@ -1,16 +1,15 @@
 package com.moises.foodapp.api.controller;
 
 import com.moises.foodapp.api.assembler.FotoProdutoModelAssembler;
+import com.moises.foodapp.api.dto.FotoProdutoModel;
 import com.moises.foodapp.api.dto.input.FotoProdutoInput;
 import com.moises.foodapp.domain.exception.EntidadeNaoEncontradaException;
 import com.moises.foodapp.domain.model.FotoProduto;
-import com.moises.foodapp.api.dto.FotoProdutoModel;
 import com.moises.foodapp.domain.model.Produto;
 import com.moises.foodapp.domain.service.CadastroProdutoService;
 import com.moises.foodapp.domain.service.CatalogoFotoProdutoService;
 import com.moises.foodapp.domain.service.FotoStorageService;
 import com.moises.foodapp.domain.service.FotoStorageService.FotoRecuperada;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @RestController

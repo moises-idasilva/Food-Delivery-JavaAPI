@@ -2,8 +2,8 @@ package com.moises.foodapp.api.controller;
 
 import com.moises.foodapp.api.assembler.CidadeInputDisassembler;
 import com.moises.foodapp.api.assembler.CidadeModelAssembler;
-import com.moises.foodapp.api.dto.input.CidadeInput;
 import com.moises.foodapp.api.dto.CidadeModel;
+import com.moises.foodapp.api.dto.input.CidadeInput;
 import com.moises.foodapp.domain.exception.EstadoNaoEncontradoException;
 import com.moises.foodapp.domain.exception.NegocioException;
 import com.moises.foodapp.domain.model.Cidade;

@@ -2,7 +2,6 @@ package com.moises.foodapp.domain.service;
 
 import com.moises.foodapp.domain.model.Pedido;
 import com.moises.foodapp.domain.repository.PedidoRepository;
-import com.moises.foodapp.domain.service.EnvioEmailService.Mensagem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

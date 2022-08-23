@@ -4,9 +4,8 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.moises.foodapp.domain.service.FotoStorageService;
 import com.moises.foodapp.core.storage.StorageProperties.TipoStorage;
-
+import com.moises.foodapp.domain.service.FotoStorageService;
 import com.moises.foodapp.infrastructure.service.storage.LocalFotoStorageService;
 import com.moises.foodapp.infrastructure.service.storage.S3FotoStorageService;
 import org.springframework.beans.factory.annotation.Autowired;

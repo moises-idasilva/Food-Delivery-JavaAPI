@@ -1,10 +1,9 @@
 package com.moises.foodapp.infrastructure.repository.spec;
 
-import java.math.BigDecimal;
-
 import com.moises.foodapp.domain.model.Restaurante;
-
 import org.springframework.data.jpa.domain.Specification;
+
+import java.math.BigDecimal;
 
 
 public class RestauranteSpecs {

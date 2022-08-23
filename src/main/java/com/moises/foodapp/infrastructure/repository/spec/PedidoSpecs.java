@@ -1,12 +1,11 @@
 package com.moises.foodapp.infrastructure.repository.spec;
 
-import java.util.ArrayList;
+import com.moises.foodapp.domain.filter.PedidoFilter;
+import com.moises.foodapp.domain.model.Pedido;
+import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Predicate;
-
-import com.moises.foodapp.domain.model.Pedido;
-import com.moises.foodapp.domain.filter.PedidoFilter;
-import org.springframework.data.jpa.domain.Specification;
+import java.util.ArrayList;
 
 
 public class PedidoSpecs {

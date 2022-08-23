@@ -1,6 +1,5 @@
 package com.moises.foodapp.api.assembler;
 
-import com.moises.foodapp.api.dto.PedidoModel;
 import com.moises.foodapp.api.dto.PedidoResumoModel;
 import com.moises.foodapp.domain.model.Pedido;
 import org.modelmapper.ModelMapper;

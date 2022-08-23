@@ -1,9 +1,7 @@
 package com.moises.foodapp.api.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moises.foodapp.api.assembler.RestauranteModelAssembler;
 import com.moises.foodapp.api.assembler.RestauranteInputDisassembler;
+import com.moises.foodapp.api.assembler.RestauranteModelAssembler;
 import com.moises.foodapp.api.dto.RestauranteModel;
 import com.moises.foodapp.api.dto.input.RestauranteInput;
 import com.moises.foodapp.api.dto.view.RestauranteView;
@@ -14,11 +12,12 @@ import com.moises.foodapp.domain.exception.RestauranteNaoEncontradoException;
 import com.moises.foodapp.domain.model.Restaurante;
 import com.moises.foodapp.domain.repository.RestauranteRepository;
 import com.moises.foodapp.domain.service.CadastroRestauranteService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.validation.Valid;
 import java.lang.reflect.Field;

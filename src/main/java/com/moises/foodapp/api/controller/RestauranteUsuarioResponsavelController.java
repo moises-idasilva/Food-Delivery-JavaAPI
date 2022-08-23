@@ -6,7 +6,6 @@ import com.moises.foodapp.domain.model.Restaurante;
 import com.moises.foodapp.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
