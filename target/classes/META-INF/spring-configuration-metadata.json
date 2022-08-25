@@ -41,6 +41,41 @@
       "sourceType": "com.moises.foodapp.core.email.EmailProperties"
     },
     {
+      "name": "foodapp.email.sandbox.destinatario",
+      "type": "java.lang.String",
+      "sourceType": "com.moises.foodapp.core.email.EmailProperties$Sandbox"
+    },
+    {
+      "name": "foodapp.storage.local.diretorio-fotos",
+      "type": "java.nio.file.Path",
+      "sourceType": "com.moises.foodapp.core.storage.StorageProperties$Local"
+    },
+    {
+      "name": "foodapp.storage.s3.bucket",
+      "type": "java.lang.String",
+      "sourceType": "com.moises.foodapp.core.storage.StorageProperties$S3"
+    },
+    {
+      "name": "foodapp.storage.s3.chave-acesso-secreta",
+      "type": "java.lang.String",
+      "sourceType": "com.moises.foodapp.core.storage.StorageProperties$S3"
+    },
+    {
+      "name": "foodapp.storage.s3.diretorio-fotos",
+      "type": "java.lang.String",
+      "sourceType": "com.moises.foodapp.core.storage.StorageProperties$S3"
+    },
+    {
+      "name": "foodapp.storage.s3.id-chave-acesso",
+      "type": "java.lang.String",
+      "sourceType": "com.moises.foodapp.core.storage.StorageProperties$S3"
+    },
+    {
+      "name": "foodapp.storage.s3.regiao",
+      "type": "com.amazonaws.regions.Regions",
+      "sourceType": "com.moises.foodapp.core.storage.StorageProperties$S3"
+    },
+    {
       "name": "foodapp.storage.tipo",
       "type": "com.moises.foodapp.core.storage.StorageProperties$TipoStorage",
       "sourceType": "com.moises.foodapp.core.storage.StorageProperties"
